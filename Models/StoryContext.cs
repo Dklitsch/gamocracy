@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace gamocracy.Models
 {
-    public class StoryContext : DbContext
+    public class StoryContext : IdentityDbContext<IdentityUser>
     {
         private static bool _created = false;
 

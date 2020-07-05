@@ -85,21 +85,21 @@ namespace gamocracy.Controllers
             return CreatedAtAction("GetStory", new { id = story.StoryId }, story);
         }
 
-        // DELETE: Story/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Story>> DeleteStory(int id)
-        {
-            var story = await _context.Stories.FindAsync(id);
-            if (story == null)
-            {
-                return NotFound();
-            }
+        // // DELETE: Story/5
+        // [HttpDelete("{id}")]
+        // public async Task<ActionResult<Story>> DeleteStory(int id)
+        // {
+        //     var story = await _context.Stories.FindAsync(id);
+        //     if (story == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            _context.Stories.Remove(story);
-            await _context.SaveChangesAsync();
+        //     _context.Stories.Remove(story);
+        //     await _context.SaveChangesAsync();
 
-            return story;
-        }
+        //     return story;
+        // }
 
         private bool StoryExists(int id)
         {
