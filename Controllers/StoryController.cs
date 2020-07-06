@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using gamocracy.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace gamocracy.Controllers
 {
@@ -74,11 +76,11 @@ namespace gamocracy.Controllers
         }
 
         // POST: Story
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Story>> PostStory(Story story)
         {
+            story.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context.Stories.Add(story);
             await _context.SaveChangesAsync();
 

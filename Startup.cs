@@ -29,7 +29,7 @@ namespace gamocracy
             services.AddAuthentication(AzureADB2CDefaults.BearerAuthenticationScheme)
                 .AddAzureADB2CBearer(options => Configuration.Bind("AzureAdB2C", options));
 
-            services.AddDbContext<StoryContext>(options => options.UseSqlite("Data Source=c:\\mydb.db;"));
+            services.AddDbContext<StoryContext>(options => options.UseSqlite("Data Source=mydb.db;"));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<StoryContext>();
             

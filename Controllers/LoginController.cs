@@ -38,7 +38,8 @@ namespace gamocracy.Controllers
         public async Task<ActionResult<string>> PostLogin(LoginInputModel input)
         {
             var result = await _signInManager.PasswordSignInAsync(input.Email, input.Password, false, lockoutOnFailure: false);
-           
+            var userId =  _userManager.FindByEmailAsync(input.Email).Result.Id;
+
             if (!result.Succeeded)
                 return null;
 
@@ -48,7 +49,7 @@ namespace gamocracy.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[] 
                 {
-                    new Claim(ClaimTypes.Email, input.Email)
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
