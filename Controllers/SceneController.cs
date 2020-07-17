@@ -13,9 +13,9 @@ namespace gamocracy.Controllers
     [ApiController]
     public class SceneController : ControllerBase
     {
-        private readonly StoryContext _context;
+        private readonly GamocracyContext _context;
 
-        public SceneController(StoryContext context)
+        public SceneController(GamocracyContext context)
         {
             _context = context;
         }

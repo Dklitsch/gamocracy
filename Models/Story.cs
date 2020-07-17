@@ -12,7 +12,6 @@ namespace gamocracy.Models
 
         [ForeignKey("IdentityUser")]
         public string CreatedBy { get; set; }
-
         public IdentityUser CreatedByUser { get; set; }
     }
 }

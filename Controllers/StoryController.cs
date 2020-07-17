@@ -15,9 +15,9 @@ namespace gamocracy.Controllers
     [ApiController]
     public class StoryController : ControllerBase
     {
-        private readonly StoryContext _context;
+        private readonly GamocracyContext _context;
 
-        public StoryController(StoryContext context)
+        public StoryController(GamocracyContext context)
         {
             _context = context;
         }
@@ -26,7 +26,8 @@ namespace gamocracy.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Story>>> GetStories()
         {
-            return await _context.Stories.ToListAsync();
+            var stories = await _context.Stories.ToListAsync();
+            return stories;
         }
 
         // GET: Story/5

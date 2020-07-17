@@ -19,12 +19,12 @@ namespace gamocracy.Controllers
     [ApiController]
     public partial class LoginController : ControllerBase
     {
-        private readonly StoryContext _context;
+        private readonly GamocracyContext _context;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AuthOptions _authOptions;
 
-        public LoginController(StoryContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, 
+        public LoginController(GamocracyContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, 
             IOptions<AuthOptions> authOptions)
         {
             _context = context;

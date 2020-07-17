@@ -14,10 +14,10 @@ namespace gamocracy.Controllers
     [ApiController]
     public partial class RegisterController : ControllerBase
     {
-        private readonly StoryContext _context;
+        private readonly GamocracyContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public RegisterController(StoryContext context, UserManager<IdentityUser> userManager)
+        public RegisterController(GamocracyContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -25,12 +25,18 @@ namespace gamocracy.Controllers
 
         // POST: Register
         [HttpPost]
-        public async Task<ActionResult<Boolean>> PostRegister(RegisterInputModel input)
+        public async Task<ActionResult<IdentityResult>> PostRegister(RegisterInputModel input)
         {
             var user = new IdentityUser { UserName = input.Email, Email = input.Email, EmailConfirmed = true };
             var result = await _userManager.CreateAsync(user, input.Password);
-
-            return result.Succeeded;
+            if (result.Succeeded)
+            {
+                return Ok(result);   
+            } 
+            else
+            {
+                return BadRequest(result);
+            }
         }
     }
 }
