@@ -16,12 +16,13 @@ namespace gamocracy
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        readonly string CorsPolicy = "_corsPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -29,9 +30,9 @@ namespace gamocracy
             services.AddAuthentication(AzureADB2CDefaults.BearerAuthenticationScheme)
                 .AddAzureADB2CBearer(options => Configuration.Bind("AzureAdB2C", options));
 
-            services.AddDbContext<StoryContext>(options => options.UseSqlite("Data Source=mydb.db;"));
+            services.AddDbContext<GamocracyContext>(options => options.UseSqlite("Data Source=mydb.db;"));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<StoryContext>();
+                    .AddEntityFrameworkStores<GamocracyContext>();
             
             services.AddControllers();
 
@@ -59,6 +60,17 @@ namespace gamocracy
                     ValidateAudience = false
                 };
             });
+
+            services.AddCors(options =>
+        {
+            options.AddPolicy(name: CorsPolicy,
+                              builder =>
+                              {
+                                  builder.WithOrigins("http://localhost:3000")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod();
+                              });
+        });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +84,8 @@ namespace gamocracy
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(CorsPolicy);
 
             app.UseAuthentication();
             app.UseAuthorization();
