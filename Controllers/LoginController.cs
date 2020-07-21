@@ -35,13 +35,14 @@ namespace gamocracy.Controllers
 
         // POST: Login
         [HttpPost]
-        public async Task<ActionResult<string>> PostLogin(LoginInputModel input)
+        public async Task<ActionResult<LoginResponse>> PostLogin(LoginInputModel input)
         {
             var result = await _signInManager.PasswordSignInAsync(input.Email, input.Password, false, lockoutOnFailure: false);
-            var userId =  _userManager.FindByEmailAsync(input.Email).Result.Id;
 
             if (!result.Succeeded)
-                return null;
+                return Unauthorized(new LoginResponse("Login Failed"));
+
+            var userId =  _userManager.FindByEmailAsync(input.Email).Result?.Id;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_authOptions.Secret);
@@ -55,7 +56,17 @@ namespace gamocracy.Controllers
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return new LoginResponse(tokenHandler.WriteToken(token));
+        }
+    }
+
+    public class LoginResponse
+    {
+        public string Response { get; }
+
+        public LoginResponse(string response)
+        {
+            Response = response;
         }
     }
 }
