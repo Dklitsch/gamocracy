@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using gamocracy.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace gamocracy.Controllers
 {
@@ -81,7 +82,7 @@ namespace gamocracy.Controllers
         [HttpPost]
         public async Task<ActionResult<Story>> PostStory(Story story)
         {
-            story.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            story.CreatedBy = User.FindFirstValue(ClaimTypes.Name);
             _context.Stories.Add(story);
             await _context.SaveChangesAsync();
 

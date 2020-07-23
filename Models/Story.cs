@@ -12,9 +12,6 @@ namespace gamocracy.Models
         public string Summary { get; set; }
         public int StartingSceneId { get; set; }
         public Scene StartingScene { get; set; }
-
-        [ForeignKey("IdentityUser")]
         public string CreatedBy { get; set; }
-        public IdentityUser CreatedByUser { get; set; }
     }
 }
