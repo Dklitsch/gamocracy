@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using gamocracy.Services;
 
 namespace gamocracy
 {
@@ -33,12 +34,12 @@ namespace gamocracy
             services.AddDbContext<GamocracyContext>(options => options.UseSqlite("Data Source=mydb.db;"));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<GamocracyContext>();
-            
+
             services.AddControllers();
 
             var authOptionsSection = Configuration.GetSection("AuthOptions");
             services.Configure<AuthOptions>(authOptionsSection);
-            
+
             var appSettings = authOptionsSection.Get<AuthOptions>();
 
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -61,7 +62,7 @@ namespace gamocracy
                 };
             });
 
-            services.AddCors(options => 
+            services.AddCors(options =>
             {
                 options.AddPolicy(name: CorsPolicy, builder =>
                     {
@@ -72,7 +73,7 @@ namespace gamocracy
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -92,6 +93,9 @@ namespace gamocracy
             {
                 endpoints.MapControllers();
             });
+
+            DatabaseSeeder.SeedAsync(userManager);
+
         }
     }
 }
